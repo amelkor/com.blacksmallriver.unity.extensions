@@ -1,0 +1,23 @@
+{
+  "name": "com.blacksmallriver.unity.extensions",
+  "author": {
+    "name": "amelkor",
+    "url": "http://amelkor.com"
+  },
+  "displayName": "BSR Unity extensions",
+  "description": "Extensions for Unity",
+  "unity": "2019.4",
+  "release": "0f1",
+  "version": "1.0.0",
+  "keywords": [
+    "unity",
+    "integration",
+    "workflow",
+    "extensions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amelkor/bsr-unity-extensions.git"
+  },
+  "type": "library"
+}
