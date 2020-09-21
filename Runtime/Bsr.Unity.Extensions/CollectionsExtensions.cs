@@ -12,23 +12,23 @@ namespace Bsr.Unity.Extensions
 
             throw new KeyNotFoundException();
         }
-    }
 
-    public static void Add<TKey, TValue>(this IDictionary<TKey, IList> dictionary, (TKey key, TValue value) tuple) where TValue : class
-    {
-        var (key, value) = tuple;
+        public static void Add<TKey, TValue>(this IDictionary<TKey, IList> dictionary, (TKey key, TValue value) tuple) where TValue : class
+        {
+            var (key, value) = tuple;
 
-        if (value == null)
-            return;
+            if (value == null)
+                return;
 
-        dictionary[key].Add(value);
-    }
+            dictionary[key].Add(value);
+        }
 
-    public static void ToArray<T>(this IList list, ref T[] array)
-    {
-        if (array == null)
-            array = new T[list.Count];
+        public static void ToArray<T>(this IList list, ref T[] array)
+        {
+            if (array == null)
+                array = new T[list.Count];
 
-        list.CopyTo(array, 0);
+            list.CopyTo(array, 0);
+        }
     }
 }
