@@ -59,13 +59,13 @@ namespace Bsr.Unity.Extensions.Unity
         /// Similar to TryGetComponent but throws exception if component missed. Use this for initialization.
         /// </summary>
         /// <exception cref="MissingComponentException">when failed to get component.</exception>
-        public static T EnsureHasComponent<T>(this GameObject gameObject) where T : Component
+        public static T EnsureHasComponent<T>(this Behaviour behaviour) where T : Component
         {
 #if UNITY_2019_3_OR_NEWER
-            if (gameObject.TryGetComponent(typeof(T), out var component))
+            if (behaviour.TryGetComponent(typeof(T), out var component))
                 return (T) component;
 #else
-            var component = gameObject.GetComponent<T>();
+            var component = behaviour.GetComponent<T>();
             if (component != null)
                 return component;
 #endif
