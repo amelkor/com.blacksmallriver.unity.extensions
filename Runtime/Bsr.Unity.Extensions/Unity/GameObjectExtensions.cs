@@ -15,7 +15,7 @@ namespace Bsr.Unity.Extensions.Unity
         /// <param name="obj">This game object</param>
         /// <param name="includeInactive"></param>
         /// <returns></returns>
-        public static Dictionary<string, T> GetComponentsInChildrenAsNameDictionary<T>(this GameObject obj, bool includeInactive = false) where T : Component
+        public static Dictionary<string, T> GetComponentsInChildrenAsNameDictionary<T>(this Behaviour obj, bool includeInactive = false) where T : Component
         {
             var components = obj.GetComponentsInChildren<T>(includeInactive);
             if (components.Length == 0)
@@ -32,7 +32,20 @@ namespace Bsr.Unity.Extensions.Unity
             return dict;
         }
 
-        public static bool TryGetComponentInChildrenWithName<T>(this GameObject obj, string childName, out T component, bool includeInactive = false) where T : Component
+        public static bool TryGetComponentInChildren<T>(this Behaviour obj, out T component, bool includeInactive = false) where T : Component
+        {
+            var c = obj.GetComponentInChildren<T>(includeInactive);
+            if (c)
+            {
+                component = c;
+                return true;
+            }
+
+            component = default;
+            return false;
+        }
+        
+        public static bool TryGetComponentInChildrenWithName<T>(this Behaviour obj, string childName, out T component, bool includeInactive = true) where T : Component
         {
             var components = obj.GetComponentsInChildren<T>(includeInactive);
             if (components.Length == 0)
@@ -72,9 +85,9 @@ namespace Bsr.Unity.Extensions.Unity
             throw new MissingComponentException($"Requested component {typeof(T).Name} not exists");
         }
 
-        public static T EnsureHasComponentInParent<T>(this GameObject gameObject) where T : Component
+        public static T EnsureHasComponentInParent<T>(this Behaviour behaviour) where T : Component
         {
-            var component = gameObject.GetComponentInParent(typeof(T));
+            var component = behaviour.GetComponentInParent(typeof(T));
 
             if (component == null)
                 throw new MissingComponentException($"Requested component {typeof(T).Name} not exists in any parent of this gameobject");
@@ -82,9 +95,9 @@ namespace Bsr.Unity.Extensions.Unity
             return (T) component;
         }
 
-        public static T EnsureHasComponentInChildren<T>(this GameObject gameObject) where T : Component
+        public static T EnsureHasComponentInChildren<T>(this Behaviour behaviour) where T : Component
         {
-            var component = gameObject.GetComponentInChildren(typeof(T), true);
+            var component = behaviour.GetComponentInChildren(typeof(T), true);
 
             if (component == null)
                 throw new MissingComponentException($"Requested component {typeof(T).Name} not exists in any parent of this gameobject");
@@ -92,9 +105,9 @@ namespace Bsr.Unity.Extensions.Unity
             return (T) component;
         }
 
-        public static T EnsureHasComponentInChildren<T>(this GameObject gameObject, string name) where T : Component
+        public static T EnsureHasComponentInChildren<T>(this Behaviour behaviour, string name) where T : Component
         {
-            if (!gameObject.TryGetComponentInChildrenWithName<T>(name, out var component, true))
+            if (!behaviour.TryGetComponentInChildrenWithName<T>(name, out var component, true))
                 throw new MissingComponentException($"Requested component {typeof(T).Name} not exists in any parent of this gameobject");
 
             return (T) component;
