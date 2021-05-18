@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // ReSharper disable ForCanBeConvertedToForeach
 
@@ -44,7 +45,7 @@ namespace Bsr.Unity.Extensions.Unity
             component = default;
             return false;
         }
-        
+
         public static bool TryGetComponentInChildrenWithName<T>(this Behaviour obj, string childName, out T component, bool includeInactive = true) where T : Component
         {
             var components = obj.GetComponentsInChildren<T>(includeInactive);
@@ -134,11 +135,31 @@ namespace Bsr.Unity.Extensions.Unity
         private static void SetLayerRecursively(Transform transform, LayerMask layer)
         {
             transform.gameObject.layer = layer;
-            
+
             for (var i = 0; i < transform.childCount; i++)
             {
                 SetLayerRecursively(transform.GetChild(i), layer);
             }
+        }
+
+        /// <summary>
+        /// Destroys the <paramref name="gameObject"/> depending on is running in UnityEditor or not.
+        /// </summary>
+        /// <param name="gameObject">GameObject to destroy.</param>
+        public static void DestroyMe(this Behaviour gameObject)
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                Object.Destroy(gameObject);
+            }
+            else
+            {
+                Object.DestroyImmediate(gameObject);
+            }
+#else
+            Object.Destroy(gameObject);
+#endif
         }
     }
 }
